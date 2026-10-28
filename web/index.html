@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Texas Hold'em</title>
+<link rel="icon" href="icon.png">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="stage">
+  <header id="bar">
+    <div class="title">Texas Hold&rsquo;em<small>Pecos Creek Saloon</small></div>
+    <button id="bRules" title="How to play">How to Play</button>
+    <button id="bHands" title="Poker hand rankings">Hand Rankings</button>
+    <span class="sep"></span>
+    <button id="bMusic" title="Music (M)">&#9835; Music</button>
+    <input id="vol" type="range" min="0" max="100" title="Volume">
+    <button id="bSfx" title="Sound effects">Sounds</button>
+    <button id="bCredits2" title="Credits and changelog">Credits</button>
+    <div class="stats"><span>Hands <b id="sHands">0</b></span><span>Won <b id="sWon">0</b></span><span>Biggest pot <b id="sBig">0</b></span></div>
+  </header>
+
+  <main id="table">
+    <canvas id="scene"></canvas>
+    <div id="seats"></div>
+    <div id="potBox"><div class="pk">Pot</div><div class="pv" id="potAmt">0</div><div class="ps" id="potSub"></div></div>
+    <div id="chipsLayer"></div>
+    <div id="cards"></div>
+    <div id="marks"></div>
+    <div id="log" class="saddle"><div class="lid">Saloon Log</div><div class="lines" id="logLines"></div></div>
+    <div id="banner"></div>
+    <canvas id="fx"></canvas>
+
+    <div id="console">
+      <div class="me" id="mePlaque">
+        <img class="av" id="meAv" alt="">
+        <div class="mi"><div class="k">Your chips</div><div class="v" id="meChips">2,000</div><div class="st" id="meStatus">&nbsp;</div></div>
+      </div>
+      <div class="center">
+        <div class="betRow" id="betRow">
+          <div class="toCall" id="toCall">&nbsp;</div>
+          <div class="presets"><button data-p="min">Min</button><button data-p="half">&frac12; Pot</button><button data-p="pot">Pot</button><button data-p="all">All-in</button></div>
+          <input type="range" id="amt" min="20" max="2000" step="5" value="40">
+          <div class="amtBox"><span>Amount</span><b id="amtVal">40</b></div>
+        </div>
+        <div class="actRow">
+          <button class="act" id="aFold"><b>Fold</b><kbd>F</kbd></button>
+          <button class="act" id="aCheck"><b>Check</b><kbd>K</kbd></button>
+          <button class="act" id="aCall"><b>Call</b><kbd>C</kbd></button>
+          <button class="act gold" id="aBet"><b>Bet</b><kbd>B</kbd></button>
+          <button class="act gold" id="aRaise"><b>Raise</b><kbd>R</kbd></button>
+        </div>
+        <div class="waitRow hidden" id="waitRow"><button class="big" id="bNext">Deal Next Hand</button><button class="big ghost hidden" id="bRestock">Restock 2,000 Chips</button></div>
+      </div>
+      <div class="helper"><div class="k">Your hand</div><div class="hv" id="myHand">&nbsp;</div><div class="hs" id="mySub">&nbsp;</div></div>
+    </div>
+    <div id="nowPlaying"></div>
+    <div id="ver"></div>
+  </main>
+
+  <div class="veil" id="title">
+    <div class="panel box title-box">
+      <div class="kick">Pull up a chair at the</div>
+      <h1>Texas Hold&rsquo;em</h1>
+      <h2>Pecos Creek Saloon &middot; No-Limit</h2>
+      <div class="folks" id="folks"></div>
+      <div class="opts">
+        <div class="opt"><span>Pace</span><div class="chips" id="optPace"><button data-v="relaxed">Relaxed</button><button data-v="steady">Steady</button><button data-v="quick">Quick</button></div></div>
+        <div class="opt"><span>Hand helper</span><div class="chips" id="optHelp"><button data-v="on">Show my hand</button><button data-v="off">Hide</button></div></div>
+      </div>
+      <div class="purse">Your chips: <b id="tChips">2,000</b> &middot; Blinds 10 / 20</div>
+      <div class="notice hidden" id="notice"></div>
+      <button class="big" id="bStart">Take a Seat</button>
+      <div class="links"><button id="bHow">How to Play</button> &middot; <button id="bHands2">Hand Rankings</button> &middot; <button id="bCredits">Credits &amp; Changelog</button></div>
+      <div class="fine">Play money only. No real money, no purchases, no accounts.</div>
+      <div class="by"><span>An</span><img src="ironite-logo.png" alt="Ironite"><span>game</span></div>
+    </div>
+  </div>
+
+  <div class="veil hidden closable" id="rules">
+    <div class="panel box text-panel">
+      <h3>How to Play Texas Hold&rsquo;em</h3>
+      <p>You're at the table with <b>Dusty</b>, <b>Miss Lula Mae</b> and <b>Cody</b>. Make the best five-card poker hand from your two <b>hole cards</b> and the five shared <b>community cards</b>, or get everyone else to fold.</p>
+      <ol>
+        <li><b>Blinds.</b> The two players left of the dealer button post the <b>small blind (10)</b> and <b>big blind (20)</b> so there's something to play for. The button moves one seat each hand.</li>
+        <li><b>Hole cards.</b> Everyone gets two private cards, then the first betting round starts left of the big blind.</li>
+        <li><b>The flop, turn and river.</b> Three community cards come out (the flop), then one (the turn), then one more (the river), with a betting round after each.</li>
+        <li><b>Your options.</b> <b>Check</b> to pass when there's no bet to you. <b>Bet</b> to put chips in first. <b>Call</b> to match the current bet. <b>Raise</b> to increase it. <b>Fold</b> to give up the hand. This is no-limit: you can bet any amount up to all your chips (all-in).</li>
+        <li><b>Showdown.</b> If more than one player is left after the river, hands are shown and the best hand wins the pot. Every hand is named on screen so you can follow along. If someone is all-in, side pots are worked out automatically.</li>
+      </ol>
+      <p>Your chips are saved between sessions. If you run out, the house restocks you for free. These chips have no cash value.</p>
+      <p class="muted">Keys: F fold &middot; K check &middot; C call &middot; B bet &middot; R raise &middot; Enter next hand &middot; M music &middot; F11 full screen</p>
+      <button class="big small" data-close>Back to the Table</button>
+    </div>
+  </div>
+
+  <div class="veil hidden closable" id="ranks">
+    <div class="panel box text-panel">
+      <h3>Poker Hands, Best to Worst</h3>
+      <div class="rankList" id="rankList"></div>
+      <button class="big small" data-close>Got It</button>
+    </div>
+  </div>
+
+  <div class="veil hidden closable" id="credits">
+    <div class="panel box text-panel">
+      <h3>Credits</h3>
+      <div class="cred">
+        <div><span>Developed &amp; Published by</span><b>Ironite</b></div>
+        <div><span>Game Design</span><b>Ironite</b></div>
+        <div><span>Card Art &amp; Illustration</span><b>Ironite</b></div>
+        <div><span>Music</span><b>Ironite</b></div>
+        <div class="tunes">"Pecos Creek Waltz", "Bluebonnet Two-Step", "Lantern Light"</div>
+        <div><span>Sound Effects</span><b>Ironite</b></div>
+        <div><span>Programming</span><b>Ironite</b></div>
+        <div><span>Typefaces</span><b>National Park, Young Serif &amp; Work Sans (SIL Open Font License)</b></div>
+      </div>
+      <p class="muted">Copyright &copy; 2026 Ironite. All rights reserved. Play money only: chips have no cash value.</p>
+      <h3>Changelog</h3>
+      <div id="changelog" class="changelog"></div>
+      <button class="big small" data-close>Close</button>
+    </div>
+  </div>
+</div>
+<script src="core.js"></script>
+<script src="poker.js"></script>
+<script src="art.js"></script>
+<script src="music.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

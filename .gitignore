@@ -1,0 +1,5 @@
+dist/
+build/
+Output/
+tools/mkres/go.sum
+*.syso
